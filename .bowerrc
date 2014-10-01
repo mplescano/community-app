@@ -1,3 +1,5 @@
 {
-  "directory": "app/bower_components"
+  "directory": "app/bower_components",
+  "proxy": "http://mlescano:Pirpo2519@lpvmprx04.cngfinancial.com:8080/",
+  "https-proxy": "http://mlescano:Pirpo2519@lpvmprx04.cngfinancial.com:8080/"
 }
