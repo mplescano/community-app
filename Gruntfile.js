@@ -48,8 +48,9 @@ module.exports = function(grunt) {
         livereload: {
             options: {
                 base: [
-                    '.tmp',
-                    '<%= mifosx.app %>'
+                     '<%= mifosx.dist %>/<%=mifosx.target%>'
+                    /*'.tmp',*/
+                    /*'<%= mifosx.app %>'*/
                 ]
             }
         }
@@ -72,7 +73,7 @@ module.exports = function(grunt) {
       options: {
         jshintrc: '.jshintrc',
         reporter: require('jshint-stylish'),
-        reporterOutput:'jshint-log.xml',
+        reporterOutput:'jshint-log.log',
         force: true
       },
       all: ['Gruntfile.js', '<%= mifosx.app %>/scripts/**/*.js']
@@ -199,7 +200,8 @@ module.exports = function(grunt) {
             '*.html',
             'views/**',
             'images/**',
-            'bower_components/**'
+            'bower_components/**',
+            'angular/**/*.js'
           ]
         },
         {
@@ -326,7 +328,7 @@ module.exports = function(grunt) {
 
 
   // Run development server using grunt serve
-  grunt.registerTask('serve', ['clean:server', 'copy:server', 'connect:livereload', 'watch']);
+  grunt.registerTask('serve', ['clean:server', 'copy:dev', 'connect:livereload', 'watch']);
   // Validate JavaScript and HTML files
   grunt.registerTask('validate', ['jshint:all', 'validation']);
   // Default task(s).
