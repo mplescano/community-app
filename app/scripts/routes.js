@@ -370,6 +370,18 @@
             .when('/editcode/:id', {
                 templateUrl: 'views/system/editcode.html'
             })
+			.when('/hooks', {
+                templateUrl: 'views/system/hooks.html'
+            })
+			.when('/viewhook/:id', {
+                templateUrl: 'views/system/viewhook.html'
+            })
+			.when('/addhook', {
+                templateUrl: 'views/system/addhook.html'
+            })
+            .when('/edithook/:id', {
+                templateUrl: 'views/system/edithook.html'
+            })
             .when('/reports', {
                 templateUrl: 'views/system/reports.html'
             })
@@ -636,6 +648,12 @@
             })
             .when('/addfinancialmapping', {
                 templateUrl: 'views/accounting/add_financial_accounting_mapping.html'
+            })
+            .when('/assignsavingsofficer/:id', {
+                templateUrl: 'views/savings/assignsavingsofficer.html'
+            })
+            .when('/unassignsavingsofficer/:id', {
+            templateUrl: 'views/savings/unassignsavingsofficer.html'
             });
         $locationProvider.html5Mode(false);
     };

@@ -7,7 +7,6 @@ war {
 	// but, because of pending https://github.com/openMF/community-app/issues/201
 	// we unfortunately need to package the entiry project (and then access /app), so:
 	from "."
-	exclude "target/**"
 	exclude "build/**"
 	exclude "node_modules"
 	exclude "dist"

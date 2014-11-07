@@ -37,6 +37,22 @@
             <button class="btn btn-warning" ng-click="cancel()">{{'label.button.cancel' | translate}}</button>
         </div>
     </script>
+    <script type="text/ng-template" id="clientSignature.html">
+        <div class="modal-header silver">
+            <img ng-src="{{largeImage}}" alt="Signature">
+        </div>
+        <div class="modal-body ">
+            <button class="btn btn-warning" ng-click="cancel()">{{'label.button.cancel' | translate}}</button>
+        </div>
+    </script>
+    <script type="text/ng-template" id="clientWithoutSignature.html">
+        <div class="modal-header silver">
+            <h3 class="bolder">{{'label.noClientSignature' | translate}}</h3>
+        </div>
+        <div class="modal-body ">
+            <button class="btn btn-warning" ng-click="cancel()">{{'label.button.ok' | translate}}</button>
+        </div>
+    </script>
 
     <script type="text/ng-template" id="uploadpic.html">
     <div class="modal-header silver">
@@ -165,9 +181,9 @@
 						            <tr class="graybg">
 						            	<th>{{'label.heading.accnum' | translate}}</th>
 						                <th>{{'label.heading.loanaccount' | translate}}</th>
-						                <th>Loan Amount</th>
-						                <th>Outstd Amt.</th>
-						                <th>Due Amount</th>
+						                <th>{{'label.heading.loanamount' | translate}}</th>
+						                <th>{{'label.heading.outstandingamount' | translate}}</th>
+						                <th>{{'label.heading.dueamount' | translate}}</th>
 						                <th>{{'label.heading.type' | translate}}</th>
 						                <th>Actions</th>
 						            </tr>
@@ -181,9 +197,9 @@
 						                	{{loanaccount.accountNo}}
 						                </td>
 						                <td class="pointer" data-ng-click="routeToLoan(loanaccount.id)">{{loanaccount.productName}}</td>
-						                <td class="pointer" data-ng-click="routeToLoan(loanaccount.id)"> - </td>
-						                <td class="pointer" data-ng-click="routeToLoan(loanaccount.id)"> - </td>
-						                <td class="pointer" data-ng-click="routeToLoan(loanaccount.id)"> - </td>
+						                <td class="pointer" data-ng-click="routeToLoan(loanaccount.id)">{{loanaccount.originalLoan|number}}</td>
+						                <td class="pointer" data-ng-click="routeToLoan(loanaccount.id)">{{loanaccount.loanBalance|number}}</td>
+						                <td class="pointer" data-ng-click="routeToLoan(loanaccount.id)">{{loanaccount.amountPaid|number}}</td>
 						                <td class="pointer center" data-ng-click="routeToLoan(loanaccount.id)" ng-if="loanaccount.loanType.value == 'Individual'">
 						                	<i tooltip="{{loanaccount.loanType.value}}" class="icon-user icon-large"></i>
 						                </td>
@@ -221,6 +237,9 @@
 						                	{{loanaccount.accountNo}}
 						                </td>
 						                <td class="pointer" data-ng-click="routeToLoan(loanaccount.id)">{{loanaccount.productName}}</td>
+                                        <td class="pointer" data-ng-click="routeToLoan(loanaccount.id)">{{loanaccount.originalLoan|number}}</td>
+                                        <td class="pointer" data-ng-click="routeToLoan(loanaccount.id)">{{loanaccount.loanBalance|number}}</td>
+                                        <td class="pointer" data-ng-click="routeToLoan(loanaccount.id)">{{loanaccount.amountPaid|number}}</td>
 						                <td class="pointer center" data-ng-click="routeToLoan(loanaccount.id)" ng-if="loanaccount.loanType.value == 'Individual'">
 						                	<i tooltip="{{loanaccount.loanType.value}}" class="icon-user icon-large"></i>
 						                </td>
@@ -265,7 +284,7 @@
 					                		{{savingaccount.accountNo}}
 						                </td>
 						                <td class="pointer" data-ng-click="routeToSaving(savingaccount.id, savingaccount.depositType.code)">{{savingaccount.productName}}</td>
-						                <td class="pointer center" data-ng-click="routeToSaving(savingaccount.id, savingaccount.depositType.code)">{{savingaccount.accountBalance}}</td>
+						                <td class="pointer center" data-ng-click="routeToSaving(savingaccount.id, savingaccount.depositType.code)">{{savingaccount.accountBalance|number}}</td>
 						                <td class="pointer" ng-if="savingaccount.status.active">
 						                	<a tooltip="{{'label.button.deposit' | translate}}" ng-href="#/savingaccount/{{savingaccount.id}}/deposit" class="btn btn-xs btn-primary ng-binding" ng-show="savingaccount.depositType.id == '100'">
 						                		<i class="icon-arrow-right icon-white"></i>
@@ -320,10 +339,10 @@
 				    	<div class="thumbnail row">
 				    		<h4><strong>{{client.displayName}}</strong></h4>
 					    	<img ng-hide="client.imagePresent" ng-src="./images/client-image-placeholder.png" alt="Avatar">
-				        	<img ng-show="client.imagePresent" ng-src="{{image}}" alt="Avatar" data-ng-click="showPicture()">
-				        	<div ng-show="client.imagePresent" class="show-large-picture" data-ng-click="showPicture()">{{'label.zoom' | translate}}</div>
-                            <img ng-show="signature_url" ng-src="{{signature_url}}" alt="Signature">
-				        	<table class="table-minified">
+				        	<img ng-show="client.imagePresent"  ng-src="{{image}}" alt="Avatar" data-ng-click="showPicture()" title="{{'label.zoom' | translate}}" >
+                            <div ng-show="signature_url" class="show-large-picture" data-ng-click="showSignature()">{{'label.showClientSignature' | translate}}</div>
+                            <div ng-hide="signature_url" class="show-large-picture" data-ng-click="showWithoutSignature()">{{'label.showClientSignature' | translate}}</div>
+                            <table class="table-minified">
 					            <tr>
 					                <th class="table-bold">{{ 'label.input.activationdate' | translate }}</th>
 					                <td><span class="padded-td">{{client.timeline.activatedOnDate | DateFormat}}<span
@@ -380,7 +399,7 @@
 					            </tr>
 					            <tr>
 					                <th>{{ 'label.lastloanamount' | translate }}</th>
-					                <td><span class="padded-td">{{client.ClientSummary.lastLoanAmount}}</span></td>
+					                <td><span class="padded-td">{{client.ClientSummary.lastLoanAmount|number}}</span></td>
 					            </tr>
 					            <tr>
 					                <th>{{ 'label.numofactiveloans' | translate }}</th>

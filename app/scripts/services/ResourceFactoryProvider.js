@@ -233,7 +233,7 @@
                         get: {method: 'GET', params: {}, isArray: true},
                         getView: {method: 'GET', params: {}}
                     }),
-                    periodicAccrualAccountingResource: defineResource(apiVer + "/accrualaccounting", {}, {
+                    periodicAccrualAccountingResource: defineResource(apiVer + "/runaccruals", {}, {
                         run: {method: 'POST', params: {}}
                     }),
                     codeResources: defineResource(apiVer + "/codes/:codeId", {codeId: "@codeId"}, {
@@ -244,12 +244,20 @@
                         getAllCodeValues: {method: 'GET', params: {}, isArray: true},
                         update: { method: 'PUT', params: {} }
                     }),
+					hookResources: defineResource(apiVer + "/hooks/:hookId", {hookId: "@hookId"}, {
+                        getAllHooks: {method: 'GET', params: {}, isArray: true},
+                        getHook: {method: 'GET', params: {}},
+						update: {method: 'PUT', params: {}}
+                    }),
+					hookTemplateResource: defineResource(apiVer + "/hooks/template", {}, {
+                        get: {method: 'GET', params: {}}
+                    }),
                     holResource: defineResource(apiVer + "/holidays", {}, {
                         getAllHols: {method: 'GET', params: {}, isArray: true}
                     }),
                     holValueResource: defineResource(apiVer + "/holidays/:holId", {holId: '@holId'}, {
                         getholvalues: {method: 'GET', params: {}},
-                        update: { method: 'PUT', params: {}, isArray: true }
+                        update: { method: 'PUT', params: {}}
                     }),
                     savingsTemplateResource: defineResource(apiVer + "/savingsaccounts/template", {}, {
                         get: {method: 'GET', params: {}}
@@ -363,7 +371,7 @@
                     }),
                     auditResource: defineResource(apiVer + "/audits/:templateResource", {templateResource: '@templateResource'}, {
                         get: {method: 'GET', params: {}},
-                        search: {method: 'GET', params: {}, isArray: true}
+                        search: {method: 'GET', params: {}, isArray: false}
                     }),
                     guarantorResource: defineResource(apiVer + "/loans/:loanId/guarantors/:templateResource", {loanId: '@loanId', templateResource: '@templateResource'}, {
                         get: {method: 'GET', params: {}},

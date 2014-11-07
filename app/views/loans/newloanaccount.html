@@ -34,7 +34,7 @@
     <tr ng-show="formData.productId">
         <td><label>{{ 'label.input.loanpurpose' | translate }}:&nbsp;</label></td>
         <td class="paddedbottom10">
-            <select id="loanPurposeId" ng-model="formData.loanPurposeId"
+            <select chosen="loanaccountinfo.loanPurposeOptions" id="loanPurposeId" ng-model="formData.loanPurposeId"
                     ng-options="loanPurpose.id as loanPurpose.name for loanPurpose in loanaccountinfo.loanPurposeOptions | orderBy:'name':reverse"
                     class="form-control width170px" value="{{loanPurpose.id}}">
                 <option value="">{{'label.selectpurpose' | translate}}</option>
@@ -182,7 +182,7 @@
             <tr>
                 <td><label>{{ 'label.input.arearstolerance' | translate }}</label></td>
                 <td class="paddedbottom10">
-                    <input id="inArrearsTolerance" type="text" ng-model="formData.inArrearsTolerance" class="form-control"/>&nbsp;{{loanaccountinfo.currency.displaySymbol}}
+                    <input id="inArrearsTolerance" type="text" ng-model="formData.inArrearsTolerance" class="form-control" number-format/>&nbsp;{{loanaccountinfo.currency.displaySymbol}}
                 </td>
                 <td><label>{{ 'label.input.interestfreeperiod' | translate }}</label></td>
                 <td class="paddedbottom10">
@@ -242,14 +242,10 @@
             </tr>
             <tr data-ng-show="loanaccountinfo.isInterestRecalculationEnabled">
                 <td>
-                    <label class="control-label">{{ 'label.input.frequency.for.recalculte.outstanding.principal' |
-                        translate }}<span class="required">*</span></label>
+                    <label>{{ 'label.input.interest.recalculation.reschdule.strategy' | translate }}</label>
                 </td>
-                <td data-ng-show="loanaccountinfo.isInterestRecalculationEnabled" class="paddedbottom10">
-                    <select id="recalculationFrequencyType" ng-model="formData.recalculationFrequencyType"
-                            ng-options="recalculationFrequencyType.id as recalculationFrequencyType.value for recalculationFrequencyType in loanaccountinfo.interestRecalculationFrequencyTypeOptions"
-                            class="form-control width170px"
-                            value="{{recalculationFrequencyType.id}}"/>
+                <td class="paddedbottom10">
+                    <label>{{ loanaccountinfo.interestRecalculationData.rescheduleStrategyType.value}}</label>
                 </td>
                 <td>
                     <label>{{ 'label.input.daysinmonth' | translate }}</label>
@@ -265,11 +261,30 @@
                 <td class="paddedbottom10">
                     <label>{{ loanaccountinfo.interestRecalculationData.interestRecalculationCompoundingType.value}}</label>
                 </td>
+
                 <td>
-                    <label>{{ 'label.input.interest.recalculation.reschdule.strategy' | translate }}</label>
+                    <label class="control-label">{{ 'label.input.frequency.for.recalculte.outstanding.principal' |
+                        translate }}<span class="required">*</span></label>
                 </td>
                 <td class="paddedbottom10">
-                    <label>{{ loanaccountinfo.interestRecalculationData.rescheduleStrategyType.value}}</label>
+                    <label>{{ loanaccountinfo.interestRecalculationData.recalculationRestFrequencyType.value}}</label>
+                </td>
+            </tr>
+            <tr data-ng-show="loanaccountinfo.isInterestRecalculationEnabled && loanaccountinfo.interestRecalculationData.recalculationRestFrequencyType.id != 1">
+                <td>
+                    <label class="control-label">{{ 'label.input.frequenc.interval.for.recalculte.outstanding.principal' | translate }}</label>
+                </td>
+                <td class="paddedbottom10">
+                    <label>{{ loanaccountinfo.interestRecalculationData.recalculationRestFrequencyInterval}}</label>
+                </td>
+
+                <td>
+                    <label class="control-label">{{ 'label.input.frequenc.date.for.recalculte.outstanding.principal' |
+                        translate }}<span class="required">*</span></label>
+                </td>
+                <td class="paddedbottom10">
+                    <input type="text" id="recalculationRestFrequencyDate" name="recalculationRestFrequencyDate" datepicker-pop="dd MMMM yyyy"
+                           ng-model="date.recalculationRestFrequencyDate" is-open="opened" min="'2000-01-01'" max="restrictDate" class="form-control"/>
                 </td>
             </tr>
         </table>
@@ -282,12 +297,12 @@
                     <tr>
                         <td class="width19"><label>{{ 'label.input.fixedemiamount' | translate }}:</label></td>
                         <td class="width31 paddedbottom10">
-                            <input id="fixedEmiAmount" type="text" ng-model="formData.fixedEmiAmount" class="form-control"/>&nbsp;
+                            <input id="fixedEmiAmount" type="text" ng-model="formData.fixedEmiAmount" class="form-control" number-format/>&nbsp;
                         </td>
                         <td class="width14"><label>{{'label.input.outstandingloanbalance' | translate}}:</label></td>
                         <td class="width36 paddedbottom10">
                             <input id="maxOutstandingLoanBalance" type="text"
-                                   ng-model="formData.maxOutstandingLoanBalance" class="form-control"/>&nbsp;
+                                   ng-model="formData.maxOutstandingLoanBalance" class="form-control" number-format/>&nbsp;
                             <a title="{{ 'label.button.addtranch' | translate }}" ng-click="addTranches()"><i
                                     class="icon-plus icon-white"></i></a>
                         </td>
@@ -311,7 +326,7 @@
                                    is-open="'openedtranche'+$index" min="minDate" max="'2020-06-22'" class="form-control"/>
                         </td>
                         <td>
-                            <input id="{{disbursementDetail[$index].principal}}" class="input-sm form-control" type="text"
+                            <input id="{{disbursementDetail[$index].principal}}" class="input-sm form-control" number-format type="text"
                                    ng-model="disbursementDetail.principal"
                                    placeholder="{{'label.input.principal' | translate}}">
                         </td>
@@ -435,25 +450,25 @@
             <td>{{period.period}}</td>
             <td>{{period.dueDate | DateFormat}}</td>
             <td>{{period.daysInPeriod}}</td>
-            <td>{{period.principalDisbursed}}</td>
-            <td>{{period.principalDue}}</td>
-            <td>{{period.principalLoanBalanceOutstanding}}</td>
-            <td>{{period.interestDue}}</td>
-            <td>{{period.feeChargesDue}}</td>
-            <td>{{period.penaltyChargesDue}}</td>
-            <td>{{period.totalDueForPeriod}}</td>
+            <td>{{period.principalDisbursed | number}}</td>
+            <td>{{period.principalDue| number}}</td>
+            <td>{{period.principalLoanBalanceOutstanding| number}}</td>
+            <td>{{period.interestDue| number}}</td>
+            <td>{{period.feeChargesDue| number}}</td>
+            <td>{{period.penaltyChargesDue| number}}</td>
+            <td>{{period.totalDueForPeriod| number}}</td>
         </tr>
         <tfoot class="ui-widget-header">
         <tr>
             <td colspan="2">{{'label.heading.total' | translate}}</td>
             <td>{{repaymentscheduleinfo.loanTermInDays}}</td>
-            <td>{{repaymentscheduleinfo.totalPrincipalDisbursed}}</td>
-            <td>{{repaymentscheduleinfo.totalPrincipalExpected}}</td>
+            <td>{{repaymentscheduleinfo.totalPrincipalDisbursed| number}}</td>
+            <td>{{repaymentscheduleinfo.totalPrincipalExpected| number}}</td>
             <td></td>
-            <td>{{repaymentscheduleinfo.totalInterestCharged}}</td>
-            <td>{{repaymentscheduleinfo.totalFeeChargesCharged}}</td>
-            <td>{{repaymentscheduleinfo.totalPenaltyChargesCharged}}</td>
-            <td>{{repaymentscheduleinfo.totalRepaymentExpected}}</td>
+            <td>{{repaymentscheduleinfo.totalInterestCharged| number}}</td>
+            <td>{{repaymentscheduleinfo.totalFeeChargesCharged| number}}</td>
+            <td>{{repaymentscheduleinfo.totalPenaltyChargesCharged| number}}</td>
+            <td>{{repaymentscheduleinfo.totalRepaymentExpected| number}}</td>
         </tr>
         </tfoot>
         </tbody>

@@ -1,11 +1,13 @@
 (function (module) {
     mifosX.controllers = _.extend(module, {
-        ViewSavingDetailsController: function (scope, routeParams, resourceFactory, location, route, dateFilter, $sce, $rootScope, API_VERSION) {
+        ViewSavingDetailsController: function (scope, routeParams, resourceFactory, location, $modal, route, dateFilter, $sce, $rootScope, API_VERSION) {
             scope.report = false;
             scope.hidePentahoReport = true;
             scope.showActiveCharges = true;
             scope.formData = {};
             scope.date = {};
+            scope.staffData = {};
+            scope.fieldOfficers = [];
             scope.isDebit = function (savingsTransactionType) {
                 return savingsTransactionType.withdrawal == true || savingsTransactionType.feeDeduction == true;
             };
@@ -28,7 +30,6 @@
                     scope.savingaccountdetails.transactions[i][dateFieldName] = new Date(scope.savingaccountdetails.transactions[i].date);
                 }
             };
-
             scope.isRecurringCharge = function (charge) {
                 return charge.chargeTimeType.value == 'Monthly Fee' || charge.chargeTimeType.value == 'Annual Fee' || charge.chargeTimeType.value == 'Weekly Fee';
             }
@@ -95,11 +96,19 @@
                     case "close":
                         location.path('/savingaccount/' + accountId + '/close');
                         break;
+                    case "assignSavingsOfficer":
+                        location.path('/assignsavingsofficer/' + accountId);
+                        break;
+                    case "unAssignSavingsOfficer":
+                        location.path('/unassignsavingsofficer/' + accountId);
+                        break;
+
                 }
             };
 
             resourceFactory.savingsResource.get({accountId: routeParams.id, associations: 'all'}, function (data) {
                 scope.savingaccountdetails = data;
+                scope.staffData.staffId = data.staffId;
                 scope.date.toDate = new Date();
                 scope.date.fromDate = new Date(data.timeline.activatedOnDate);
                 scope.status = data.status.value;
@@ -297,6 +306,8 @@
                 scope.report = false;
             };
 
+
+
             scope.viewprintdetails = function () {
                 scope.printbtn = true;
                 scope.hidePentahoReport = true;
@@ -324,7 +335,7 @@
             scope.printReport = function () {
                 window.print();
                 window.close();
-            }
+            };
 
             scope.deleteAll = function (apptableName, entityId) {
                 resourceFactory.DataTablesResource.delete({datatablename: apptableName, entityId: entityId, genericResultSet: 'true'}, {}, function (data) {
@@ -352,9 +363,8 @@
             };
             
         }
-    })
-    ;
-    mifosX.ng.application.controller('ViewSavingDetailsController', ['$scope', '$routeParams', 'ResourceFactory', '$location', '$route', 'dateFilter', '$sce', '$rootScope', 'API_VERSION', mifosX.controllers.ViewSavingDetailsController]).run(function ($log) {
+    });
+    mifosX.ng.application.controller('ViewSavingDetailsController', ['$scope', '$routeParams', 'ResourceFactory', '$location','$modal', '$route', 'dateFilter', '$sce', '$rootScope', 'API_VERSION', mifosX.controllers.ViewSavingDetailsController]).run(function ($log) {
         $log.info("ViewSavingDetailsController initialized");
     });
 }(mifosX.controllers || {}));
