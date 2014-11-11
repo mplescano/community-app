@@ -21,6 +21,7 @@ Travis
 
 1. To download the dependencies, and be able to build, first install bower & grunt
    ```
+    npm config set prefix "C:\\programas\\nodejs\\0.10.33"
     npm install -g bower
     npm install -g grunt-cli
    ```
@@ -63,6 +64,8 @@ If you want to connect to the API running elsewhere, then append the baseApiUrl 
 e.g. http://localhost:9000/?baseApiUrl=https://localhost:8443&tenantIdentifier=default
 
 e.g. http://localhost:9000/?baseApiUrl=https://demo.openmf.org&tenantIdentifier=default
+
+e.g. http://localhost:8080/community-app/?baseApiUrl=https://localhost:8443/mifosng-provider
 ## Adding dependencies
 
 You can also add more dependencies on bower.json. 
