@@ -30,12 +30,12 @@
                         };
                     });
                     _.each(['post', 'put'], function (method) {
-                        self[method] = function (url, data) {
-                            var config = getConfig({
+                        self[method] = function (url, data, configOptional) {
+                            var config = getConfig(_.extend(configOptional || {}, {
                                 method: method.toUpperCase(),
                                 url: url,
                                 data: data
-                            });
+                            }));
                             return http(config);
                         };
                     });

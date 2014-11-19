@@ -14,7 +14,7 @@
 
             this.authenticateWithUsernamePassword = function (credentials) {
                 scope.$broadcast("UserAuthenticationStartEvent");
-                httpService.post(apiVer + "/authentication?username=" + credentials.username + "&password=" + credentials.password)
+                httpService.post(apiVer + "/authentication", {}, {params: {username: credentials.username, password: credentials.password}})
                     .success(onSuccess)
                     .error(onFailure);
             };
